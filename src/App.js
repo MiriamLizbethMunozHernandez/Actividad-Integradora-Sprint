@@ -1,14 +1,20 @@
-import React from 'react';
-import UploadDocument from './UploadDocument';  // Importamos el componente de subir documento
-import DocumentList from './DocumentList';      // Importamos el componente para ver los documentos
-import './App.css';  // Mantén los estilos si los estás usando
+import React, { useState } from 'react';
+import UploadDocument from './UploadDocument';
+import DocumentList from './DocumentList';
+import './App.css';
 
 function App() {
+  const [documents, setDocuments] = useState([]);
+
+  const handleFileUpload = (file) => {
+    setDocuments([...documents, file]);
+  };
+
   return (
     <div className="App">
-      <h1>Portal Farmaceutica</h1>
-      <UploadDocument />  {/* Aquí se mostrará el formulario para subir documentos */}
-      <DocumentList />    {/* Aquí se mostrará la lista de documentos subidos */}
+      <h1>Carga y Gestión de Documentos</h1>
+      <UploadDocument onFileUpload={handleFileUpload} />
+      <DocumentList documents={documents} />
     </div>
   );
 }

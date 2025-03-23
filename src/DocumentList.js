@@ -1,35 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function DocumentList() {
-  const [documents, setDocuments] = useState([]);
+const DocumentList = ({ documents }) => {
 
-  // Función para agregar un documento a la lista
-  const addDocument = (file) => {
-    setDocuments([...documents, file]);
-  };
-
-  // Manejo de subida y almacenamiento en lista
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      addDocument(selectedFile);
-    }
+  const descargarDocumento = (file) => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(file);
+    link.download = file.name;
+    link.click();
   };
 
   return (
     <div>
       <h2>Documentos Subidos</h2>
-      <input type="file" onChange={handleFileChange} />
       <ul>
         {documents.map((doc, index) => (
           <li key={index}>
             {doc.name}
-            <button onClick={() => {
-              const link = document.createElement('a');
-              link.href = URL.createObjectURL(doc);
-              link.download = doc.name;
-              link.click();
-            }}>
+            <button onClick={() => descargarDocumento(doc)}>
               Descargar
             </button>
           </li>
@@ -37,6 +24,6 @@ function DocumentList() {
       </ul>
     </div>
   );
-}
+};
 
 export default DocumentList;

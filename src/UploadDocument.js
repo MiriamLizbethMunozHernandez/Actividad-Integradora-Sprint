@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const UploadDocument = ({ onFileUpload }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [categoria, setCategoria] = useState('');
   const [error, setError] = useState('');
 
   const formatosPermitidos = ['pdf', 'doc', 'docx'];
@@ -36,11 +37,15 @@ const UploadDocument = ({ onFileUpload }) => {
   };
 
   const handleUploadClick = () => {
-    if (selectedFile) {
-      onFileUpload(selectedFile);
-      setSelectedFile(null);
-      document.getElementById('file-input').value = '';
+    if (!selectedFile || !categoria) {
+      setError('Debes seleccionar un archivo y una categoría.');
+      return;
     }
+
+    onFileUpload(selectedFile, categoria);
+    setSelectedFile(null);
+    setCategoria('');
+    document.getElementById('file-input').value = '';
   };
 
   return (
@@ -56,6 +61,23 @@ const UploadDocument = ({ onFileUpload }) => {
       />
 
       {selectedFile && <p>Archivo seleccionado: <strong>{selectedFile.name}</strong></p>}
+
+      <div>
+        <label htmlFor="categoria">Categoría:</label>
+        <select
+          id="categoria"
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          required
+        >
+          <option value="">Selecciona una categoría</option>
+          <option value="Procedimientos">Procedimientos</option>
+          <option value="Manuales">Manuales</option>
+          <option value="Políticas">Políticas</option>
+          <option value="Informes">Informes</option>
+        </select>
+      </div>
+
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <button onClick={handleUploadClick} disabled={!selectedFile}>
